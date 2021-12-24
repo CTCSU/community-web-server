@@ -22,6 +22,13 @@ class UserService extends Service {
     return user;
   }
 
+  async getCurrentUser() {
+    const { ctx, config } = this;
+    const token = ctx.request.header.authorization;
+    const decode = ctx.app.jwt.verify(token, config.jwt.secret);
+    return await this.ctx.model.User.findOne({ _id: decode.id }).exec();
+  }
+
 }
 
 module.exports = UserService;
